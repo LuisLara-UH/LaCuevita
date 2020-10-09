@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LaCuevita.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,6 @@ namespace LaCuevita.Data
             : base(options)
         {
         }
+        public DbSet<ApplicationUser> Users { get; set; }
     }
 }

@@ -7,13 +7,13 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using LaCuevita.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using LaCuevita.Models;
 
 namespace LaCuevita.Areas.Identity.Pages.Account
 {
@@ -35,6 +35,9 @@ namespace LaCuevita.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+
+            //Change Required Email Confirmation
+            _userManager.Options.SignIn.RequireConfirmedEmail = false;
         }
 
         [BindProperty]

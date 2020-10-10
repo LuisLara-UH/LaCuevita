@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LaCuevita.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-        public DbSet<ApplicationUser> Users { get; set; }
     }
 }

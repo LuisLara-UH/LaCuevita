@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LaCuevita.Models;
+using static LaCuevita.Extensions.Roles.RoleExtensions;
 
 namespace LaCuevita
 {
@@ -31,8 +32,9 @@ namespace LaCuevita
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -64,6 +66,18 @@ namespace LaCuevita
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapAreaControllerRoute(
+                    name: "Admin",
+                    areaName: "Admin",
+                    pattern: "{controller=ManageUsers}/{action=Index}");
+                endpoints.MapAreaControllerRoute(
+                    name: "Client",
+                    areaName: "Client",
+                    pattern: "{controller=ClientMain}/{action=Index}");
+                endpoints.MapAreaControllerRoute(
+                    name: "Seller",
+                    areaName: "Seller",
+                    pattern: "{controller=SellerMain}/{action=Index}");
                 endpoints.MapRazorPages();
             });
 
@@ -72,7 +86,7 @@ namespace LaCuevita
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             List<RoleType> Roles = new List<RoleType> { RoleType.Admin, RoleType.Client, RoleType.Seller };
@@ -84,7 +98,7 @@ namespace LaCuevita
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    var roleResult = await roleManager.CreateAsync(new ApplicationRole(role));
+                    var roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
                     if (!roleResult.Succeeded)
                         throw new Exception("Failed to create Role " + roleName);
                 }

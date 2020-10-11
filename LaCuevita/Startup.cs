@@ -38,7 +38,7 @@ namespace LaCuevita
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +66,29 @@ namespace LaCuevita
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            CreateRoles(serviceProvider).Wait();
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            List<RoleType> Roles = new List<RoleType> { RoleType.Admin, RoleType.Client, RoleType.Seller };
+
+            foreach (var role in Roles)
+            {
+                var roleName = RoleHelper.RoleValueMap[role];
+
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    var roleResult = await roleManager.CreateAsync(new ApplicationRole(role));
+                    if (!roleResult.Succeeded)
+                        throw new Exception("Failed to create Role " + roleName);
+                }
+            }
         }
     }
 }

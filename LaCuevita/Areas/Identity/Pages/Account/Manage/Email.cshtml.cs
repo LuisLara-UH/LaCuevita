@@ -22,12 +22,12 @@ namespace LaCuevita.Areas.Identity.Pages.Account.Manage
 
         public EmailModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            SignInManager<ApplicationUser> signInManager
+            /*IEmailSender emailSender*/)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
+            /*_emailSender = emailSender;*/
         }
 
         public string Username { get; set; }

@@ -28,13 +28,13 @@ namespace LaCuevita.Areas.Identity.Pages.Account
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            ILogger<ExternalLoginModel> logger
+            /*IEmailSender emailSender*/)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
-            _emailSender = emailSender;
+            /*_emailSender = emailSender;*/
         }
 
         [BindProperty]

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LaCuevita.Models;
-using static LaCuevita.Extensions.Roles.RoleExtensions;
+using LaCuevita.Services.AdminManager;
 
 namespace LaCuevita
 {
@@ -35,6 +35,7 @@ namespace LaCuevita
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            services.AddTransient<IAdminManager, AdminManager>();
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -89,18 +90,16 @@ namespace LaCuevita
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            List<RoleType> Roles = new List<RoleType> { RoleType.Admin, RoleType.Client, RoleType.Seller };
+            List<string> Roles = new List<string> { "Admin", "Client", "Seller" };
 
             foreach (var role in Roles)
             {
-                var roleName = RoleHelper.RoleValueMap[role];
-
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                var roleExist = await roleManager.RoleExistsAsync(role);
                 if (!roleExist)
                 {
-                    var roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                    var roleResult = await roleManager.CreateAsync(new IdentityRole(role));
                     if (!roleResult.Succeeded)
-                        throw new Exception("Failed to create Role " + roleName);
+                        throw new Exception("Failed to create Role " + role);
                 }
             }
         }

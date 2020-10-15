@@ -16,10 +16,10 @@ namespace LaCuevita.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager/*, IEmailSender sender*/)
         {
             _userManager = userManager;
-            _sender = sender;
+            /*_sender = sender;*/
         }
 
         public string Email { get; set; }

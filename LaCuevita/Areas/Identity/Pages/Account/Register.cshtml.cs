@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using LaCuevita.Extensions.Roles;
-using static LaCuevita.Extensions.Roles.RoleExtensions;
 
 namespace LaCuevita.Areas.Identity.Pages.Account
 {
@@ -83,7 +81,7 @@ namespace LaCuevita.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var addRoleResult = await _userManager.AddToRoleAsync(user, RoleHelper.RoleValueMap[RoleType.Client]);
+                    var addRoleResult = await _userManager.AddToRoleAsync(user, "Client");
                     if (!addRoleResult.Succeeded)
                         throw new Exception("Error assigning role");
 

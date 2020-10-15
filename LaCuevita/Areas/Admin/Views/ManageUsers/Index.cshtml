@@ -1,7 +1,37 @@
-﻿
+﻿@model LaCuevita.Areas.Admin.Models.UserRolesViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h2>Manage Users</h2>
 
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Usuarios")
+        </th>
+        @foreach (var role in Model.Roles)
+        {
+            <th>
+                @Html.DisplayName(role.Name)
+            </th>
+        }
+    </tr>
+
+    @foreach (var userRole in Model.UserRoles)
+    {
+        <tr>
+            <td>
+                @Html.DisplayName(userRole.User.Email)
+            </td>
+
+            @foreach (var role in Model.Roles)
+            {
+                <td>
+                    @Html.CheckBoxFor(m => userRole.IsInRole[role.Name])
+                </td>
+            }
+        </tr>
+    }
+
+</table>

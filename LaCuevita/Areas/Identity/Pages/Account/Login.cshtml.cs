@@ -25,12 +25,12 @@ namespace LaCuevita.Areas.Identity.Pages.Account
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager,
-            IEmailSender emailSender)
+            UserManager<ApplicationUser> userManager
+            /*IEmailSender emailSender*/)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
+            /*_emailSender = emailSender;*/
             _logger = logger;
         }
 

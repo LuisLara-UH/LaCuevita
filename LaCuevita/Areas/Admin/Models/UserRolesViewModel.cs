@@ -1,4 +1,5 @@
 ﻿using LaCuevita.Models;
+using LaCuevita.Services.AdminManager;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,21 +10,23 @@ namespace LaCuevita.Areas.Admin.Models
 {
     public class UserRolesViewModel
     {
-        private UserManager<ApplicationUser> _userManager;
-        public UserRolesViewModel(List<ApplicationUser> users, UserManager<ApplicationUser> userManager)
+        private IAdminManager _adminManager;
+        public UserRolesViewModel(IAdminManager adminManager)
         {
-            _userManager = userManager;
+            _adminManager = adminManager;
 
-            _users = users;
+            _users = _adminManager.Users();
 
             _userRoles = new List<UserRolesItemView>();
         }
 
         public async Task Prepare()
         {
+            _roles = _adminManager.Roles();
+
             foreach (var user in _users)
             {
-                var userRole = new UserRolesItemView(user, _userManager);
+                var userRole = new UserRolesItemView(user, _adminManager);
                 await userRole.Prepare();
                 _userRoles.Add(userRole);
             }
@@ -40,6 +43,12 @@ namespace LaCuevita.Areas.Admin.Models
         public List<UserRolesItemView> UserRoles
         {
             get => _userRoles;
+        }
+
+        private List<IdentityRole> _roles;
+        public List<IdentityRole> Roles
+        {
+            get => _roles;
         }
         #endregion
     }

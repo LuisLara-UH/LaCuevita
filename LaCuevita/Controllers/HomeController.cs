@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LaCuevita.Models;
 using Microsoft.AspNetCore.Identity;
-using static LaCuevita.Extensions.Roles.RoleExtensions;
 
 namespace LaCuevita.Controllers
 {
